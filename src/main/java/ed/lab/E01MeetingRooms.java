@@ -11,32 +11,33 @@ public class E01MeetingRooms {
             return 0;
         }
 
-
-        /*
-        Queue<MeetingInterval> endTimeMinHeap = new PriorityQueue<>((a, b) -> a.endTime() - b.endTime());
-        Queue<MeetingInterval> endTimeMaxHeap = new PriorityQueue<>((a, b) -> b.endTime() - a.endTime());
         Queue<MeetingInterval> startTimeMinHeap = new PriorityQueue<>((a, b) -> a.startTime() - b.startTime());
-        Queue<MeetingInterval> startTimeMaxHeap = new PriorityQueue<>((a, b) -> b.startTime() - a.startTime());
+        Queue<MeetingInterval> endTimeMinHeap = new PriorityQueue<>((a, b) -> a.endTime() - b.endTime());
 
         for (MeetingInterval interval : meetingIntervals) {
             startTimeMinHeap.offer(interval);
-            endTimeMaxHeap.offer(interval);
         }
 
         int rooms = 0;
         int time = 0;
         while (!startTimeMinHeap.isEmpty()) {
-            MeetingInterval interval = startTimeMinHeap.poll();
-            if (interval.startTime() <= time && time <= interval.endTime()) {
-                endTimeMinHeap.offer(interval);
+            MeetingInterval interval = startTimeMinHeap.peek();
 
+            if (interval.startTime() < time) {
+                endTimeMinHeap.offer(startTimeMinHeap.poll());
+                rooms = Math.max(endTimeMinHeap.size(), rooms);
             }
-            time++;
+
+            if (!endTimeMinHeap.isEmpty() && endTimeMinHeap.peek().endTime() <= time) {
+                endTimeMinHeap.poll();
+            }
+
+            if (endTimeMinHeap.isEmpty() || (interval.startTime() != endTimeMinHeap.peek().startTime())) {
+                time++;
+            }
         }
 
         return rooms;
-
-         */
     }
 
 }
